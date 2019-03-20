@@ -1,9 +1,9 @@
-const playerScore = 0;
-const computerScore = 0;
+let playerScore = 0;
+let computerScore = 0;
 const playerScore_span = document.getElementById("player-score");
 const computerScore_span = document.getElementById("comp-score");
 const scoreBoard_div = document.querySelector(".score-board");
-const result_div = document.querySelector(".result");
+const result_p = document.querySelector(".result > p");
 const rock_div = document.getElementById("r");
 const paper_div = document.getElementById("p");
 const scissors_div = document.getElementById("s");
@@ -16,6 +16,33 @@ function getCompChoice () {
     return choices[randomNumber];
 }
 
+function convertToWord(letter){
+    if (letter === "r") return "Rock";
+    if (letter === "p") return "Paper";
+    if (letter === "s") return "Scissors";
+    if (letter === "spock") return "Spock";
+    if (letter === "l") return "Lizard";
+}
+
+function wins(player, computer) {
+    playerScore++;
+    playerScore_span.innerHTML = playerScore;
+    computerScore_span.innerHTML = computerScore;
+    result_p.innerHTML = convertToWord(player) + " beats " + convertToWord(computer) + ". You won!";
+    document.getElementById(player).classList.add('green-glow');
+}
+
+function ties(player, computer) {
+    result_p.innerHTML = convertToWord(player) + " is " + convertToWord(computer) + ". You tied!";
+}
+
+function lose(player, computer) {
+    computerScore++;
+    playerScore_span.innerHTML = playerScore;
+    computerScore_span.innerHTML = computerScore;
+    result_p.innerHTML = convertToWord(player) + " does not beat " + convertToWord(computer) + ". You lost!"
+}
+
 function game(playerChoice) {
     const compChoice = getCompChoice();
     switch (playerChoice + compChoice) {
@@ -24,9 +51,8 @@ function game(playerChoice) {
         case "pp":
         case "ll":
         case "spockspock":
-            console.log("tie");
+            ties(playerChoice, compChoice);
             break;
-
         case "rs":
         case "rl":
         case "pr":
@@ -37,9 +63,8 @@ function game(playerChoice) {
         case "spockr":
         case "lspock":
         case "lp":
-            console.log("user wins");
+            wins(playerChoice, compChoice);
             break;
-
         case "sr":
         case "lr":
         case "rp":
@@ -50,7 +75,7 @@ function game(playerChoice) {
         case "rspock":
         case "spockl":
         case "pl":
-            console.log("user loses")
+            lose(playerChoice, compChoice);
             break;
     }
 }
